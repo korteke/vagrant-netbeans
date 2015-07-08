@@ -1,0 +1,22 @@
+---
+
+   - name: Install OpenJDK
+     apt: name=openjdk-7-jdk state=present
+
+   - name: Check if installed
+     command: "/usr/bin/test -e /home/vagrant/netbeans-8.0.2/bin/netbeans"
+     register: netbeans_installed
+     sudo: false
+
+   - name: Get Netbeans
+     get_url: url="http://download.netbeans.org/netbeans/8.0.2/final/bundles/netbeans-8.0.2-javaee-linux.sh" dest="/home/vagrant/netbeans-8.0.2-javaee-linux.sh" mode=0755
+     sudo: false
+
+   - name: Install netbeans
+     shell: "/home/vagrant/netbeans-8.0.2-javaee-linux.sh --silent"
+     sudo: false
+     when: netbeans_installed.rc != 0
+
+   - name: Start XFCE4
+     shell: "startxfce4 &"
+     sudo: false
